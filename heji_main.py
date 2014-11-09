@@ -27,10 +27,14 @@ def saveToExcel(lists, filter_date):
     row = row + 1
 
     for list in lists:
-        __title = list['title']
-        _title = re.findall('.+\((.*?)\).+', __title)[0]
-        title = unicode(_title, "utf-8")
-        excel_opeator.write('sheet1', row, col, title)
+        ___title = list['title']
+        print ___title
+
+        __title = re.findall('.+\((.*?)\).+', ___title)
+        if 0 != len(__title):
+            _title = __title[0]
+            title = unicode(_title, "utf-8")
+            excel_opeator.write('sheet1', row, col, title)
 
         comments = list['comments']
         for comment in comments:
@@ -84,8 +88,15 @@ def parserUrl(url):
 def getUrlsFromConf(cFile):
     fp = open(cFile)
     urllists = []
+    filter_date = ''
     while(True):
         line = fp.readline()
+
+        if len(line) == 1 :
+            continue
+        if(line[0] == '#'):
+            continue
+
         date = re.findall('[0-2][0-9]-[0-3][0-9]', line)
         if(0 != len(date)) :
            filter_date = date[0]

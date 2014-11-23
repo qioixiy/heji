@@ -1,4 +1,4 @@
-#!env python
+#!/bin/env python
 # -*- coding: utf-8 -*-
 
 #from:http://www.yihaomen.com/article/python/210.htm
@@ -21,7 +21,7 @@ ERROR = {
 class BrowserBase(object):
 
     def __init__(self):
-        self.timeout = 5
+        self.timeout = 15
         socket.setdefaulttimeout(self.timeout)
 
     def speak(self,name,content):

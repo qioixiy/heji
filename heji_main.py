@@ -28,7 +28,7 @@ def saveToExcel(lists, filter_date):
 
     for list in lists:
         ___title = list['title']
-        print ___title
+        print ___title.encode("gbk")
 
         __title = re.findall('.+\((.*?)\).+', ___title)
         if 0 != len(__title):

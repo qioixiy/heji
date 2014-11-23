@@ -41,7 +41,7 @@ def getMapFromLists(list):
     if (0 != len(myItems)):
         kv['time'] = myItems[0]
     else :
-        print 'warning. %s' % (kv['name'])
+        print 'warning. %s' % (kv['name'].encode("gbk"))
         kv['time'] = ''
 
     myItems = re.findall('<span title="" class="item-rank-rst irr-star(.*?)0"></span>',list,re.S)

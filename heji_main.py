@@ -5,6 +5,7 @@ import splider
 import libs
 import excel_op
 import sys
+import os
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -134,3 +135,5 @@ def main(conf, xlsfilename):
 if __name__=='__main__':
     main('conf_1.txt', 'result_1.xls')
     main('conf_2.txt', 'result_2.xls')
+
+    os.system("pause")

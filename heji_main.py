@@ -8,8 +8,8 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-def saveToExcel(lists, filter_date):
-    excel_opeator = excel_op.excel_OP()
+def saveToExcel(lists, filter_date, filename):
+    excel_opeator = excel_op.excel_OP(filename)
     excel_opeator.add_sheet('sheet1')
     row = 0
     col = 0
@@ -111,11 +111,11 @@ def getUrlsFromConf(cFile):
 
     return urllists,filter_date
 
-if __name__=='__main__':
+def main(conf, xlsfilename):
     oneshop = {}
     allshop =[]
 
-    urllists,filter_date = getUrlsFromConf('conf.txt')
+    urllists,filter_date = getUrlsFromConf(conf)
     
     for url in urllists:
         title, comments, url = parserUrl(url)
@@ -128,4 +128,9 @@ if __name__=='__main__':
 
     print 'len = %d' % len(allshop)
 
-    saveToExcel(allshop, filter_date)
+    saveToExcel(allshop, filter_date, xlsfilename)
+
+
+if __name__=='__main__':
+    main('conf_1.txt', 'result_1.xls')
+    main('conf_2.txt', 'result_2.xls')

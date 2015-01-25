@@ -11,7 +11,7 @@ class excel_OP(object):
         self.sheetNameVK = {}
 
     def __del__(self):
-        print 'ok.'
+        print self.fileName +' save ok.'
 
     def save(self):
         self.workbook.save(self.fileName)

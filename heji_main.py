@@ -6,111 +6,38 @@ import os
 
 import splider
 import libs
-import excel_op
 import conf_parser
+import heji_htmlparser
+import csv_op
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-def saveToExcel(lists, filter_date, filename):
-    excel_opeator = excel_op.excel_OP(filename)
-    excel_opeator.add_sheet('sheet1')
-    row = 0
-    col = 0
-    col_name = 2
-    col_href = 3
-    col_time = 4
-    col_desc = 5
-    col_star = 6
-    excel_opeator.write('sheet1', row, col_name, 'name')
-    #excel_opeator.write('sheet1', row, col_href, 'href')
-    excel_opeator.write('sheet1', row, col_time, 'time')
-    excel_opeator.write('sheet1', row, col_desc, 'desc')
-    excel_opeator.write('sheet1', row, col_star, 'star')
-
-    row = row + 1
-
-    for list in lists:
-        ___title = list['title']
-        print ___title.encode("gbk")
-
-        __title = re.findall('.+\((.*?)\).+', ___title)
-        if 0 != len(__title):
-            _title = __title[0]
-            title = unicode(_title, "utf-8")
-            excel_opeator.write('sheet1', row, col, title)
-
-        comments = list['comments']
-        for comment in comments:
-            if (comment['time'] != filter_date) :
-                continue
-
-            name = unicode(comment['name'], "utf-8")
-            #href = unicode(comment['href'], "utf-8")
-            time = unicode(comment['time'], "utf-8")
-            desc = unicode(comment['desc'], "utf-8")
-            star = unicode(comment['star'], "utf-8")
-
-            excel_opeator.write('sheet1', row, col_name, name)
-            #excel_opeator.write('sheet1', row, col_href, href)
-            excel_opeator.write('sheet1', row, col_time, time)
-            excel_opeator.write('sheet1', row, col_desc, desc)
-            excel_opeator.write('sheet1', row, col_star, star)
-            row = row + 1
-
-        row = row + 1
-
-    excel_opeator.save()
-
-def parserUrl(url):
+def get_data_from_url(url):
     mysplider = splider.BrowserBase()
-    fp = mysplider.openurl(url)
-    html = fp.read()
-    title = re.findall('<title>(.*?)</title>', html, re.S)[0]
+    html = mysplider.openurl(url).read()
     
     DEBUG = False
     if DEBUG:
         logfp = open('log.html', 'w')
         logfp.write(html)
         logfp.close()
+    
+    return html
 
-    #lists = libs.getListsFromHtml(html, r'<li class="comment-item"', r'</li>')
-    #for list in lists:
-    #    libs.getMapFromLists(list)
-
-    myItems = re.findall('<li id="rev_(.*?)" data-id="(.*?)"(.*?)</li>', html, re.S)
-    print len(myItems)
-    items = []
-    for item in myItems:
-        items.append(item[2])
-
-    comments = []
-    for item in items:
-        comments.append(libs.getMapFromLists(item))
-    return title, comments, url
-
-def main(conf, xlsfilename):
-    oneshop = {}
-    allshop =[]
+def main(conf, filename):
 
     urllists,filter_date = conf_parser.getUrlsFromConf(conf)
-    
+	
+    urls_comments = []
     for url in urllists:
-        title, comments, url = parserUrl(url)
-        oneshop['title'] = title
-        oneshop['comments'] = comments
-        oneshop['url'] = url
-
-        #note must be deepcopy
-        allshop.append(copy.deepcopy(oneshop))
-
-    print 'len = %d' % len(allshop)
-
-    saveToExcel(allshop, filter_date, xlsfilename)
-
+        url_comments = heji_htmlparser.html_parser(get_data_from_url(url))
+        urls_comments.append(url_comments)
+    csv_op.save_result_to_csv(filename, urls_comments)
 
 if __name__=='__main__':
-    main('conf_1.txt', 'result_1.xls')
-    main('conf_2.txt', 'result_2.xls')
+    main('conf_1.txt', 'result_1.csv')
+    main('conf_2.txt', 'result_2.csv')
 
     os.system("pause")
+

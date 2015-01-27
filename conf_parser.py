@@ -1,9 +1,15 @@
 import re
 
 def getUrlsFromConf(cFile):
-    fp = open(cFile)
     urllists = []
     filter_date = ''
+    
+    try:
+        fp = open(cFile)
+    except:
+        print cFile, 'not exist!'
+        return urllists,filter_date
+    
     while(True):
         line = fp.readline()
 

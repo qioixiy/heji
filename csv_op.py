@@ -16,11 +16,12 @@ if __name__ == '__main__':
     writer_cvs('in.csv')
     reader_cvs('in.csv')
 
-def save_result_to_csv(cvs_filename, results):
+def save_result_to_csv(cvs_filename, results, spec_data=''):
     writer = csv.writer(file(cvs_filename, 'wb'))
 
     for result in results:
         shop_name = result['shop_name']
         comments = result['comments']
         for comment in comments:
-            writer.writerow( [shop_name, comment['username'], comment['date'], comment['comment'], comment['star'] ])
+            if spec_data == '' or spec_data == comment['date']:
+                writer.writerow( [shop_name, comment['username'], comment['date'], comment['comment'], comment['star'] ])

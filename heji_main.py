@@ -33,11 +33,11 @@ def main(conf, filename):
     for url in urllists:
         url_comments = heji_htmlparser.html_parser(get_data_from_url(url))
         urls_comments.append(url_comments)
-    csv_op.save_result_to_csv(filename, urls_comments)
+    csv_op.save_result_to_csv(filename, urls_comments, filter_date)
 
 if __name__=='__main__':
-    main('conf_1.txt', 'result_1.csv')
-    main('conf_2.txt', 'result_2.csv')
+    main('conf_zdd.txt', 'result_zdd.csv')
+    main('conf_zmj.txt', 'result_zmj.csv')
 
     os.system("pause")
 

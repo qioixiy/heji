@@ -16,7 +16,7 @@ options = {
     }
 }
 
-data_files = ['conf.txt']
+data_files = ['conf_zdd.txt','conf_zmj.txt']
 
 setup(
     console=[
